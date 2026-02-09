@@ -3,42 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spam Detection</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Spam Email Detection</title>
+    
+    <!-- Link to external CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h2>Spam Detection</h2>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST" action="/predict">
-                            <div class="form-group">
-                                <label for="message">Enter your message:</label>
-                                <textarea class="form-control" name="message" id="message" rows="4">{{ message }}</textarea>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary">Predict</button>
-                            </div>
-                        </form>
-                        {% if prediction %}
-                            <div class="alert mt-4 text-center {{ 'alert-danger' if prediction == 'Spam' else 'alert-success' }}">
-                                <h4>Prediction: {{ prediction }}</h4>
-                            </div>
-                        {% endif %}
-                    </div>
+    <div class="container">
+        <div class="header">
+            <h1>SPAM EMAIL DETECTION</h1>
+            <p>Spam email detection with machine learning implementation</p>
+        </div>
+        
+        <div class="content">
+            <form method="POST" action="/predict">
+                <label style="display: block; margin-bottom: 10px; font-weight: 600; font-size: 1.1em;">
+                    Enter message or email content:
+                </label>
+                <textarea name="message" 
+                          placeholder="Type your message or email here..."
+                          required>{{ message if message else '' }}</textarea>
+                <button class="btn" type="submit">CHECK EMAIL</button>
+            </form>
+
+            {% if error %}
+            <div class="error">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            {% if prediction %}
+            <div class="result {{ 'spam' if 'SPAM' in prediction else 'notspam' }}">
+                <h2>{{ prediction }}</h2>   
+                <div class="confidence">{{ confidence }}</div>
+                <div class="preview">
+                    <strong>Original message:</strong><br>
+                    <small>{{ message }}</small>
+                    {% if cleaned %}
+                    <br><br><strong>After preprocessing:</strong><br>
+                    <small>{{ cleaned[:200] }}...</small>
+                    {% endif %}
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
-
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
