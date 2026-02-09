@@ -16,17 +16,12 @@ st.set_page_config(
 )
 
 # Load NLTK resources
-# Load NLTK resources
-# NLTK data should be installed via nltk.txt on Streamlit Cloud, 
-# but we keep this as a fallback for local testing.
 @st.cache_resource
 def load_nltk_resources():
-    try:
-        nltk.data.find('corpora/stopwords')
-        nltk.data.find('tokenizers/punkt')
-    except LookupError:
-        nltk.download('stopwords')
-        nltk.download('punkt')
+    # Force download to ensure they are available in Streamlit Cloud
+    nltk.download('stopwords')
+    nltk.download('punkt')
+    nltk.download('punkt_tab')
 
 load_nltk_resources()
 
