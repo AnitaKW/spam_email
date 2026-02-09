@@ -16,16 +16,17 @@ st.set_page_config(
 )
 
 # Load NLTK resources
+# Load NLTK resources
+# NLTK data should be installed via nltk.txt on Streamlit Cloud, 
+# but we keep this as a fallback for local testing.
 @st.cache_resource
 def load_nltk_resources():
-    resources = ['stopwords', 'punkt']
-    for resource in resources:
-        try:
-            path = f'corpora/{resource}' if resource == 'stopwords' else f'tokenizers/{resource}'
-            nltk.data.find(path)
-        except LookupError:
-            nltk.download(resource, quiet=True)
-    return True
+    try:
+        nltk.data.find('corpora/stopwords')
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        nltk.download('stopwords')
+        nltk.download('punkt')
 
 load_nltk_resources()
 
